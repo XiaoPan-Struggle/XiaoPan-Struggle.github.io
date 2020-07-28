@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>音乐</title>
+    <!-- 样式 -->
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+
+  <body>
+    <div class="wrap">
+      <!-- 播放器主体区域 -->
+      <div class="play_wrap" id="player">
+        <div class="search_bar">
+          <img src="images/player_title.png" alt="" />
+          <!-- 搜索歌曲 -->
+          <input
+            type="text"
+            autocomplete="off"
+            v-model="query"
+            @keyup.enter="searchMusic"
+          />
+        </div>
+        <div class="center_con">
+          <!-- 搜索歌曲列表 -->
+          <div class="song_wrapper">
+            <ul class="song_list">
+              <li v-for="item in musicList">
+                <a href="javascript:;" @click="playMusic(item.id)"></a>
+                <b>{{ item.name }}</b>
+                <span v-if="item.mvid!=0" @click="playMV(item.mvid)"
+                  ><i></i
+                ></span>
+              </li>
+            </ul>
+            <img src="images/line.png" class="switch_btn" alt="" />
+          </div>
+          <!-- 歌曲信息容器 -->
+          <div class="player_con" :class="{playing:isPlaying}">
+            <img src="images/player_bar.png" class="play_bar" />
+            <!-- 黑胶碟片 -->
+            <img src="images/disc.png" class="disc autoRotate" />
+            <img :src="musicCover" class="cover autoRotate" />
+          </div>
+          <!-- 评论容器 -->
+          <div class="comment_wrapper">
+            <h5 class="title">热门留言</h5>
+            <div class="comment_list">
+              <dl v-for="item in hotComments">
+                <dt><img :src="item.user.avatarUrl" alt="" /></dt>
+                <dd class="name">{{ item.nickname}}</dd>
+                <dd class="detail">
+                  {{ item.content }}
+                </dd>
+              </dl>
+            </div>
+            <img src="images/line.png" class="right_line" />
+          </div>
+        </div>
+        <div class="audio_con">
+          <audio
+            ref="audio"
+            @play="play"
+            @pause="pause"
+            :src="musicUrl"
+            controls
+            autoplay
+            loop
+            class="myaudio"
+          ></audio>
+        </div>
+        <div class="video_con" v-show="isShow" style="display: none;">
+          <video ref="video" :src="mvUrl" controls="controls"></video>
+          <div class="mask" @click="hide"></div>
+        </div>
+      </div>
+    </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- 官网提供的 axios 在线地址 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      axios.defaults.baseURL = 'https://autumnfish.cn';
+      axios.defaults.withCredentials = true;
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+      var app = new Vue({
+        el: '#player',
+        data: {
+          // 查询关键字
+          query: '',
+          // 歌曲数组
+          musicList: [],
+          // 歌曲地址
+          musicUrl: '',
+          // 歌曲封面
+          musicCover: '',
+          // 歌曲评论
+          hotComments: [],
+          // 动画播放状态
+          isPlaying: false,
+          // 遮罩层的显示状态
+          isShow: false,
+          // mv地址
+          mvUrl: '',
+        },
+        methods: {
+          // 歌曲搜索
+          searchMusic() {
+            if (this.query == 0) {
+              return;
+            }
+            axios.get('/search?keywords=' + this.query).then((res) => {
+              // 保存歌曲
+              this.musicList = res.data.result.songs;
+              console.log(this.musicList);
+            });
+            // 清空搜索区域
+            this.query = '';
+          },
+          // 播放歌曲
+          playMusic(id) {
+            // 根据id获取歌曲地址
+            axios.get('/song/url?id=' + id).then((res) => {
+              this.musicUrl = res.data.data[0].url;
+              console.log(res.data.data[0].url);
+            });
+            // 根据id获取详情
+            axios.get('/song/detail?ids=' + id).then(
+              res => {
+                this.musicCover = res.data.songs[0].al.picUrl
+                console.log(res);
+              }
+            )
+            // 根据id获取歌曲的热评
+            axios.get('/comment/hot?type=0&id=' + id).then(
+              res => {
+                this.hotComments = res.data.hotComments
+                console.log(res.data.hotComments);
+              }
+            )
+          },
+          // audio的play事件
+          play() {
+            // 开启旋转动画
+            this.isPlaying = true;
+            // 清空mv的信息
+            this.mvUrl = '';
+          },
+          // audio的pause事件
+          pause() {
+            this.isPlaying = false;
+          },
+          // mv播放
+          playMV(mvid) {
+            if (mvid) {
+              this.isShow = true
+              // 获取mv
+              axios.get('/mv/url?id=' + mvid).then(
+                res => {
+                  // 暂停歌曲的播放
+                  this.$refs.audio.pause();
+                  console.log(this.$refs);
+                  // 存储mv地址
+                  this.mvUrl = res.data.data.url
+                  console.log(res);
+                }
+              )
+            }
+          },
+          // 关闭遮罩层
+          hide() {
+            this.isShow = false
+            this.$refs.video.pause()
+          }
+        },
+      });
+    </script>
+  </body>
+</html>
