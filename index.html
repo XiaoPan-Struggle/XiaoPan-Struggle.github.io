@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <title>音乐</title>
     <!-- 样式 -->
     <link rel="stylesheet" href="./css/index.css" />
   </head>
-
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
   <body>
     <div class="wrap">
       <!-- 播放器主体区域 -->
@@ -24,16 +28,20 @@
             @keyup.enter="searchMusic"
             placeholder="搜索音乐，歌手"
           />
-          <a href="javascript:;" @click="searchMusic"><img src="./images/zoom.png" alt=""></a>
+          <a href="javascript:;" @click="searchMusic"
+            ><img src="./images/zoom.png" alt=""
+          /></a>
         </div>
         <div class="center_con">
           <!-- 搜索歌曲列表 -->
           <div class="song_wrapper">
             <ul class="song_list">
-              <li v-for="item in musicList">
+              <li v-for="item in musicList" v-cloak>
                 <a href="javascript:;" @click="playMusic(item.id)"></a>
-                <b @click="playMusic(item.id)">{{ item.name }}</b>
-                <span v-if="item.mvid!=0" @click="playMV(item.mvid)"><i></i></span>
+                <b @click="playMusic(item.id)" v-cloak>{{ item.name }}</b>
+                <span v-if="item.mvid!=0" @click="playMV(item.mvid)"
+                  ><i></i
+                ></span>
               </li>
             </ul>
             <img src="images/line.png" class="switch_btn" alt="" />
@@ -51,8 +59,8 @@
             <div class="comment_list">
               <dl v-for="item in hotComments">
                 <dt><img :src="item.user.avatarUrl" alt="" /></dt>
-                <dd class="name">{{ item.nickname}}</dd>
-                <dd class="detail">
+                <dd class="name" v-cloak>{{ item.nickname}}</dd>
+                <dd class="detail" v-cloak>
                   {{ item.content }}
                 </dd>
               </dl>
@@ -85,7 +93,8 @@
     <script>
       axios.defaults.baseURL = 'https://autumnfish.cn';
       axios.defaults.withCredentials = true;
-      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+      axios.defaults.headers.post['Content-Type'] =
+        'application/x-www-form-urlencoded';
       var app = new Vue({
         el: '#player',
         data: {
@@ -128,19 +137,15 @@
               console.log(res.data.data[0].url);
             });
             // 根据id获取详情
-            axios.get('/song/detail?ids=' + id).then(
-              res => {
-                this.musicCover = res.data.songs[0].al.picUrl
-                console.log(res);
-              }
-            )
+            axios.get('/song/detail?ids=' + id).then((res) => {
+              this.musicCover = res.data.songs[0].al.picUrl;
+              console.log(res);
+            });
             // 根据id获取歌曲的热评
-            axios.get('/comment/hot?type=0&id=' + id).then(
-              res => {
-                this.hotComments = res.data.hotComments
-                console.log(res.data.hotComments);
-              }
-            )
+            axios.get('/comment/hot?type=0&id=' + id).then((res) => {
+              this.hotComments = res.data.hotComments;
+              console.log(res.data.hotComments);
+            });
           },
           // audio的play事件
           play() {
@@ -156,25 +161,23 @@
           // mv播放
           playMV(mvid) {
             if (mvid) {
-              this.isShow = true
+              this.isShow = true;
               // 获取mv
-              axios.get('/mv/url?id=' + mvid).then(
-                res => {
-                  // 暂停歌曲的播放
-                  this.$refs.audio.pause();
-                  console.log(this.$refs);
-                  // 存储mv地址
-                  this.mvUrl = res.data.data.url
-                  console.log(res);
-                }
-              )
+              axios.get('/mv/url?id=' + mvid).then((res) => {
+                // 暂停歌曲的播放
+                this.$refs.audio.pause();
+                console.log(this.$refs);
+                // 存储mv地址
+                this.mvUrl = res.data.data.url;
+                console.log(res);
+              });
             }
           },
           // 关闭遮罩层
           hide() {
-            this.isShow = false
-            this.$refs.video.pause()
-          }
+            this.isShow = false;
+            this.$refs.video.pause();
+          },
         },
       });
     </script>
