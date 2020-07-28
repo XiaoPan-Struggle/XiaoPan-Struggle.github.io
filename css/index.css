@@ -12,30 +12,26 @@ dd {
   top: 0;
   width: 100%;
   height: 100%;
-  background: url("../images/bg.jpg") no-repeat;
+  background: url('../images/bg.jpg') no-repeat;
   background-size: 100% 100%;
 }
 
 .play_wrap {
-  width: 800px;
-  height: 544px;
+  width: 1020px;
+  height: 700px;
   position: fixed;
-  left: 50%;
-  top: 50%;
-  margin-left: -400px;
-  margin-top: -272px;
+  left: 25%;
+  top: 15%;
   /* background-color: #f9f9f9; */
 }
 
 .search_bar {
+  position: relative;
   height: 60px;
-  background-color: #1eacda;
+  background-color: #c62f2f;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
+  line-height: 60px;
   z-index: 11;
 }
 
@@ -44,27 +40,37 @@ dd {
 }
 
 .search_bar input {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   margin-right: 23px;
   width: 296px;
   height: 34px;
   border-radius: 17px;
   border: 0px;
-  background: url("../images/zoom.png") 265px center no-repeat
-    rgba(255, 255, 255, 0.45);
   text-indent: 15px;
   outline: none;
+  transform: translate(-50%, -50%);
+}
+
+.search_bar a {
+  position: absolute;
+  left: 59%;
+  top: 50%;
+  transform: translateY(-40%);
 }
 
 .center_con {
-  height: 435px;
-  background-color: rgba(255, 255, 255, 0.5);
+  height: 591px;
+  background-color: #16181c;
+  border-bottom: 1px solid #e1e1e2;
   display: flex;
   position: relative;
 }
 
 .song_wrapper {
-  width: 200px;
-  height: 435px;
+  width: 250px;
+  height: 591px;
   box-sizing: border-box;
   padding: 10px;
   list-style: none;
@@ -90,35 +96,40 @@ dd {
 
 .song_list li {
   font-size: 12px;
-  color: #333;
+  color: #fff;
   height: 40px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  width: 580px;
   padding-left: 10px;
 }
 
 .song_list li:nth-child(odd) {
-  background-color: rgba(240, 240, 240, 0.3);
+  background-color: #252526;
 }
 
 .song_list li a {
   display: block;
   width: 17px;
   height: 17px;
-  background-image: url("../images/play.png");
+  background-image: url('../images/play.png');
   background-size: 100%;
-  margin-right: 5px;
+  margin-right: 15px;
   box-sizing: border-box;
 }
 
 .song_list li b {
   font-weight: normal;
   width: 122px;
+  height: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .song_stretch .song_list li b {
@@ -132,14 +143,14 @@ dd {
 .song_list li span {
   width: 23px;
   height: 17px;
-  margin-right: 50px;
+  margin-left: 40px;
 }
 .song_list li span i {
   display: block;
   width: 100%;
   height: 100%;
   cursor: pointer;
-  background: url("../images/table.png") left -48px no-repeat;
+  background: url('../images/table.png') left -48px no-repeat;
 }
 
 .song_list li em,
@@ -149,10 +160,10 @@ dd {
 }
 
 .player_con {
-  width: 400px;
+  width: 386px;
   height: 435px;
   position: absolute;
-  left: 200px;
+  left: 250px;
   top: 0px;
 }
 
@@ -188,22 +199,23 @@ dd {
   z-index: 8;
 }
 .comment_wrapper {
-  width: 180px;
-  height: 435px;
+  width: 386px;
+  height: 591px;
   list-style: none;
   position: absolute;
-  left: 600px;
+  right: 0px;
   top: 0px;
-  padding: 25px 10px;
+  padding: 0px 10px;
+  box-sizing: border-box;
 }
 .comment_wrapper .title {
-  position: absolute;
-  top: 0;
-  margin-top: 10px;
+  margin: 10px 0;
+  color: #fff;
+  font-size: 20px;
 }
 .comment_wrapper .comment_list {
   overflow: auto;
-  height: 410px;
+  height: 90%;
 }
 .comment_wrapper .comment_list::-webkit-scrollbar {
   display: none;
@@ -238,7 +250,7 @@ dd {
 }
 
 .comment_wrapper .detail {
-  color: #666;
+  color: #dcdde4;
   margin-top: 5px;
   line-height: 18px;
 }
@@ -249,7 +261,7 @@ dd {
   border-bottom-right-radius: 4px;
 }
 .myaudio {
-  width: 800px;
+  width: 100%;
   height: 40px;
   margin-top: 5px;
   outline: none;
@@ -312,13 +324,14 @@ dd {
 .switch_btn {
   position: absolute;
   right: 0;
-  top: 0;
-  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .right_line {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .video_con video {
   position: fixed;
@@ -343,7 +356,7 @@ dd {
   position: fixed;
   width: 40px;
   height: 40px;
-  background: url("../images/shutoff.png") no-repeat;
+  background: url('../images/shutoff.png') no-repeat;
   left: 50%;
   margin-left: 400px;
   margin-top: -273px;

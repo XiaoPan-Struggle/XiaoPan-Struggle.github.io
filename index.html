@@ -15,14 +15,16 @@
       <!-- 播放器主体区域 -->
       <div class="play_wrap" id="player">
         <div class="search_bar">
-          <img src="images/player_title.png" alt="" />
+          <img src="images/player_title.png" alt="搜索" />
           <!-- 搜索歌曲 -->
           <input
             type="text"
             autocomplete="off"
             v-model="query"
             @keyup.enter="searchMusic"
+            placeholder="搜索音乐，歌手"
           />
+          <a href="javascript:;" @click="searchMusic"><img src="./images/zoom.png" alt=""></a>
         </div>
         <div class="center_con">
           <!-- 搜索歌曲列表 -->
@@ -30,10 +32,8 @@
             <ul class="song_list">
               <li v-for="item in musicList">
                 <a href="javascript:;" @click="playMusic(item.id)"></a>
-                <b>{{ item.name }}</b>
-                <span v-if="item.mvid!=0" @click="playMV(item.mvid)"
-                  ><i></i
-                ></span>
+                <b @click="playMusic(item.id)">{{ item.name }}</b>
+                <span v-if="item.mvid!=0" @click="playMV(item.mvid)"><i></i></span>
               </li>
             </ul>
             <img src="images/line.png" class="switch_btn" alt="" />
