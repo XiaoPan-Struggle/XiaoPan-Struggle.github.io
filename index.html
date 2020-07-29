@@ -36,7 +36,7 @@
           <!-- 搜索歌曲列表 -->
           <div class="song_wrapper">
             <ul class="song_list">
-              <li v-for="item in musicList" v-cloak>
+              <li v-for="item in musicList">
                 <a href="javascript:;" @click="playMusic(item.id)"></a>
                 <b @click="playMusic(item.id)" v-cloak>{{ item.name }}</b>
                 <span v-if="item.mvid!=0" @click="playMV(item.mvid)"
@@ -51,7 +51,14 @@
             <img src="images/player_bar.png" class="play_bar" />
             <!-- 黑胶碟片 -->
             <img src="images/disc.png" class="disc autoRotate" />
-            <img :src="musicCover" class="cover autoRotate" />
+            <img v-cloak :src="picUrl" class="cover autoRotate" />
+            <!-- 歌曲详情 -->
+            <div class="musicDetails">
+              <p v-cloak v-show="arName">歌手：{{ arName }}</p>
+              <p v-cloak v-show="alName">专辑：{{ alName }}</p>
+              <p v-cloak v-show="musicName">歌名：{{ musicName }}</p>
+              <p v-cloak v-show="aliaContent">{{ aliaContent }}</p>
+            </div>
           </div>
           <!-- 评论容器 -->
           <div class="comment_wrapper">
@@ -90,96 +97,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- 官网提供的 axios 在线地址 -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
-      axios.defaults.baseURL = 'https://autumnfish.cn';
-      axios.defaults.withCredentials = true;
-      axios.defaults.headers.post['Content-Type'] =
-        'application/x-www-form-urlencoded';
-      var app = new Vue({
-        el: '#player',
-        data: {
-          // 查询关键字
-          query: '',
-          // 歌曲数组
-          musicList: [],
-          // 歌曲地址
-          musicUrl: '',
-          // 歌曲封面
-          musicCover: '',
-          // 歌曲评论
-          hotComments: [],
-          // 动画播放状态
-          isPlaying: false,
-          // 遮罩层的显示状态
-          isShow: false,
-          // mv地址
-          mvUrl: '',
-        },
-        methods: {
-          // 歌曲搜索
-          searchMusic() {
-            if (this.query == 0) {
-              return;
-            }
-            axios.get('/search?keywords=' + this.query).then((res) => {
-              // 保存歌曲
-              this.musicList = res.data.result.songs;
-              console.log(this.musicList);
-            });
-            // 清空搜索区域
-            this.query = '';
-          },
-          // 播放歌曲
-          playMusic(id) {
-            // 根据id获取歌曲地址
-            axios.get('/song/url?id=' + id).then((res) => {
-              this.musicUrl = res.data.data[0].url;
-              console.log(res.data.data[0].url);
-            });
-            // 根据id获取详情
-            axios.get('/song/detail?ids=' + id).then((res) => {
-              this.musicCover = res.data.songs[0].al.picUrl;
-              console.log(res);
-            });
-            // 根据id获取歌曲的热评
-            axios.get('/comment/hot?type=0&id=' + id).then((res) => {
-              this.hotComments = res.data.hotComments;
-              console.log(res.data.hotComments);
-            });
-          },
-          // audio的play事件
-          play() {
-            // 开启旋转动画
-            this.isPlaying = true;
-            // 清空mv的信息
-            this.mvUrl = '';
-          },
-          // audio的pause事件
-          pause() {
-            this.isPlaying = false;
-          },
-          // mv播放
-          playMV(mvid) {
-            if (mvid) {
-              this.isShow = true;
-              // 获取mv
-              axios.get('/mv/url?id=' + mvid).then((res) => {
-                // 暂停歌曲的播放
-                this.$refs.audio.pause();
-                console.log(this.$refs);
-                // 存储mv地址
-                this.mvUrl = res.data.data.url;
-                console.log(res);
-              });
-            }
-          },
-          // 关闭遮罩层
-          hide() {
-            this.isShow = false;
-            this.$refs.video.pause();
-          },
-        },
-      });
-    </script>
+    <script src="./js/main.js"></script>
   </body>
 </html>

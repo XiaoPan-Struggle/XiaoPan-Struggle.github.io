@@ -100,7 +100,6 @@ dd {
   height: 40px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
   padding-left: 10px;
 }
@@ -161,10 +160,19 @@ dd {
 
 .player_con {
   width: 386px;
-  height: 435px;
+  height: 100%;
   position: absolute;
   left: 250px;
   top: 0px;
+}
+
+.player_con .musicDetails {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+  color: #fff;
 }
 
 .player_con2 {
