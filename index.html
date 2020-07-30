@@ -8,6 +8,7 @@
     <title>音乐</title>
     <!-- 样式 -->
     <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/m.css">
   </head>
   <style>
     [v-cloak] {
@@ -88,7 +89,7 @@
           ></audio>
         </div>
         <div class="video_con" v-show="isShow" style="display: none;">
-          <video ref="video" :src="mvUrl" controls="controls"></video>
+          <video autoplay ref="video" :src="mvUrl" controls="controls"></video>
           <div class="mask" @click="hide"></div>
         </div>
       </div>
