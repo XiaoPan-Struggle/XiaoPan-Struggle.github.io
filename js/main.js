@@ -34,7 +34,7 @@ axios.defaults.baseURL = 'https://autumnfish.cn';
         el: '#player',
         data: {
           // 查询关键字
-          query: '',
+          query: '薛之谦',
           // 歌曲数组
           musicList: [],
           // 歌曲地址
@@ -57,6 +57,9 @@ axios.defaults.baseURL = 'https://autumnfish.cn';
           isShow: false,
           // mv地址
           mvUrl: ''
+        },
+        created() {
+          this.searchMusic()
         },
         methods: {
           // 歌曲搜索
